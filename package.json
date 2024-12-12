@@ -1,0 +1,27 @@
+{
+  "name": "notebackend",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perttunurmi/fso-osa3.git"
+  },
+  "author": "Perttu Nurmi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/perttunurmi/fso-osa3/issues"
+  },
+  "homepage": "https://github.com/perttunurmi/fso-osa3#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
