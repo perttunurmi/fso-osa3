@@ -4,7 +4,8 @@ import axios from 'axios'
 import personsService from './services/persons'
 import './index.css'
 
-const baseUrl = "http://localhost:3001/api/persons"
+const PORT = process.env.PORT | 3001;
+const baseUrl = `http://localhost:${PORT}/api/persons`
 
 const App = () => {
   const [persons, setPersons] = useState([])
