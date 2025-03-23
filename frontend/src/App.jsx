@@ -4,7 +4,6 @@ import axios from 'axios'
 import personsService from './services/persons'
 import './index.css'
 
-const PORT = process.env.PORT | 3001;
 const baseUrl = `/api/persons`
 
 const App = () => {
