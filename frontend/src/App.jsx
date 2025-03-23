@@ -4,12 +4,14 @@ import axios from 'axios'
 import personsService from './services/persons'
 import './index.css'
 
+const baseUrl = "http://localhost:3001/api/persons"
+
 const App = () => {
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/persons")
+      .get(baseUrl)
       .then(response => {
         console.log(response.data)
         setPersons(response.data)
