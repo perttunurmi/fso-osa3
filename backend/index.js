@@ -1,5 +1,7 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
+const Person = require("./models/person");
 const app = express();
 app.use(express.static("dist"));
 app.use(express.json());
@@ -10,6 +12,7 @@ morgan.token("body", (request) => {
     return " ";
   }
 });
+
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body"),
 );
@@ -32,19 +35,16 @@ let persons = [
   },
 ];
 
-app.get("/api/persons", (_request, response) => {
-  response.json(persons);
+app.get("/api/persons", (request, response) => {
+  Person.find({}).then((persons) => {
+    response.json(persons);
+  });
 });
 
 app.get("/api/persons/:id", (request, response) => {
-  const id = request.params.id;
-  const person = persons.find((person) => person.id === id);
-
-  if (person) {
-    return response.json(person);
-  } else {
-    response.status(404).end();
-  }
+  Person.findById(request.params.id).then((person) => {
+    response.json(person);
+  });
 });
 
 app.delete("/api/persons/:id", (request, response) => {
@@ -62,34 +62,31 @@ app.post("/api/persons", (request, response) => {
       error: "name is required",
     });
   }
+
   if (!body.number) {
     return response.status(400).json({
       error: "number is required",
     });
   }
 
-  if (persons.find((person) => person.name === body.name) !== undefined) {
-    return response.status(400).json({
-      error: "name must be unique",
-    });
-  }
-
-  const person = {
+  const person = new Person({
     name: body.name,
     number: body.number,
     id: Math.floor(Math.random() * Math.pow(10, 10)),
-  };
+  });
 
-  persons = persons.concat(person);
-
-  response.json(person);
+  person.save().then((savedPerson) => {
+    response.json(savedPerson);
+  });
 });
 
-app.get("/info", (_request, response) => {
-  const date = new Date();
-  response.send(
-    `<div><div>Phonebook has info for ${persons.length} people</div><div>${date}</div></div>`,
-  );
+app.get("/info", (request, response) => {
+  Person.find({}).then((persons) => {
+    const date = new Date();
+    response.send(
+      `<div><div>Phonebook has info for ${persons.length} people</div><div>${date}</div></div>`,
+    );
+  });
 });
 
 const PORT = process.env.PORT | 3001;
