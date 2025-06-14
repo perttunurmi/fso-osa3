@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 app.use(express.static("dist"));
+require("dotenv").config();
+const Note = require("./models/note");
 
 app.use(express.json());
 
@@ -13,22 +15,6 @@ const requestLogger = (request, response, next) => {
 };
 
 app.use(requestLogger);
-
-const mongoose = require("mongoose");
-
-// ÄLÄ KOSKAAN TALLETA SALASANOJA GitHubiin!
-const password = process.argv[2];
-const url = `mongodb+srv://perttunurmi:${password}@cluster0.0is8uux.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-
-mongoose.set("strictQuery", false);
-mongoose.connect(url);
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
-});
-
-const Note = mongoose.model("Note", noteSchema);
 
 let notes = [
   {
@@ -59,14 +45,9 @@ app.get("/api/notes", (request, response) => {
 });
 
 app.get("/api/notes/:id", (request, response) => {
-  const id = request.params.id;
-  const note = notes.find((note) => note.id === id);
-
-  if (note) {
+  Note.findById(request.params.id).then((note) => {
     response.json(note);
-  } else {
-    response.status(404).end();
-  }
+  });
 });
 
 app.delete("/api/notes/:id", (request, response) => {
@@ -91,15 +72,14 @@ app.post("/api/notes", (request, response) => {
     });
   }
 
-  const note = {
+  const note = new Note({
     content: body.content,
     important: body.important || false,
-    id: generateId(),
-  };
+  });
 
-  notes = notes.concat(note);
-
-  response.json(note);
+  note.save().then((savedNote) => {
+    response.json(savedNote);
+  });
 });
 
 const unknownEndpoint = (request, response) => {
@@ -108,7 +88,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
