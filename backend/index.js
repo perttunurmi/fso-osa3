@@ -14,6 +14,22 @@ const requestLogger = (request, response, next) => {
 
 app.use(requestLogger);
 
+const mongoose = require("mongoose");
+
+// ÄLÄ KOSKAAN TALLETA SALASANOJA GitHubiin!
+const password = process.argv[2];
+const url = `mongodb+srv://perttunurmi:${password}@cluster0.0is8uux.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
+mongoose.set("strictQuery", false);
+mongoose.connect(url);
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  important: Boolean,
+});
+
+const Note = mongoose.model("Note", noteSchema);
+
 let notes = [
   {
     id: "1",
@@ -37,7 +53,9 @@ app.get("/", (request, response) => {
 });
 
 app.get("/api/notes", (request, response) => {
-  response.json(notes);
+  Note.find({}).then((notes) => {
+    response.json(notes);
+  });
 });
 
 app.get("/api/notes/:id", (request, response) => {
