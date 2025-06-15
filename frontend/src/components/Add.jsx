@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const Add = ({ handleNewName, handleNewNumber, handleSubmit, name, number }) => {
   return (
     <>
@@ -13,5 +15,14 @@ const Add = ({ handleNewName, handleNewNumber, handleSubmit, name, number }) => 
     </>
   )
 }
+
+Add.propTypes = {
+  handleNewName: PropTypes.func,
+  handleNewNumber: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  name: PropTypes.string,
+  number: PropTypes.string
+}
+
 
 export default Add

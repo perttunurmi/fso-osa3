@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import Numbers from './Number'
 import Filter from './Filter'
 import Add from './Add'
@@ -17,6 +19,19 @@ const Phonebook = ({ filteredPersons, handleFilter, handleNewName, handleNewNumb
       <Numbers persons={filteredPersons} deletePerson={deletePerson} />
     </div>
   )
+}
+
+Phonebook.propTypes = {
+  filteredPersons: PropTypes.string,
+  handleFilter: PropTypes.func,
+  handleNewName: PropTypes.func,
+  handleNewNumber: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  name: PropTypes.string,
+  number: PropTypes.string,
+  deletePerson: PropTypes.func,
+  message: PropTypes.string,
+  style: PropTypes.string
 }
 
 export default Phonebook

@@ -104,7 +104,7 @@ const App = () => {
 
   const deletePerson = (person) => {
     window.confirm(`Delete ${person.name}?`)
-      ? personsService.deleteFromDb(person.id).then(_response => {
+      ? personsService.deleteFromDb(person.id).then(() => {
         personsService.getAll().then(response => {
           setPersons(response.data)
           setStatus("ok")
