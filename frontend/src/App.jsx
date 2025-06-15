@@ -65,9 +65,10 @@ const App = () => {
               }, 3000)
             }
             )
-          }).catch(_error => {
+          }).catch(error => {
             setStatus("error")
-            setMessage(`Information of ${personObject.name} has already been removed from server`)
+            setMessage(error.response.data.error)
+            console.log(error)
             setTimeout(() => {
               setMessage(null)
             }, 5000)

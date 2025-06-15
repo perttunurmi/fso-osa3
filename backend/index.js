@@ -52,10 +52,29 @@ app.get("/api/persons/:id", (request, response, next) => {
 });
 
 app.put("/api/persons/:id", (request, response, next) => {
-  Person.findByIdAndUpdate(request.params.id, {
-    name: request.body.name,
-    number: request.body.number,
-  })
+  const body = request.body;
+
+  if (!body.name) {
+    return response.status(400).json({
+      error: "name is required",
+    });
+  }
+
+  if (!body.number) {
+    return response.status(400).json({
+      error: "number is required",
+    });
+  }
+
+  Person.findByIdAndUpdate(
+    request.params.id,
+    {
+      name: request.body.name,
+      number: request.body.number,
+    },
+    { runValidators: true },
+  )
+
     .then((person) => response.json(person))
     .catch((error) => next(error));
 });
