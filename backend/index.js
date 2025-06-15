@@ -52,10 +52,11 @@ app.get("/api/persons/:id", (request, response, next) => {
 });
 
 app.put("/api/persons/:id", (request, response, next) => {
-  Person.findByIdAndUpdate(request.params.id)
-    .then((person) => {
-      response.json(person);
-    })
+  Person.findByIdAndUpdate(request.params.id, {
+    name: request.body.name,
+    number: request.body.number,
+  })
+    .then((person) => response.json(person))
     .catch((error) => next(error));
 });
 

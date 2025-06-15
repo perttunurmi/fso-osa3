@@ -53,7 +53,7 @@ const App = () => {
         ? personsService.update(
           persons.find((person) =>
             person.name === personObject.name)
-            ._id, personObject)
+            .id, personObject)
           .then(_reponse => {
             console.log(_reponse);
             personsService.getAll().then(response => {
@@ -94,7 +94,7 @@ const App = () => {
 
   const deletePerson = (person) => {
     window.confirm(`Delete ${person.name}?`)
-      ? personsService.deleteFromDb(person._id).then(_response => {
+      ? personsService.deleteFromDb(person.id).then(_response => {
         personsService.getAll().then(response => {
           setPersons(response.data)
           setStatus("ok")
